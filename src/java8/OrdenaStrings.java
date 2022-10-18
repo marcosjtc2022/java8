@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 //Digita 'main' + ctrl + backspace a IDE cria o método main.
 //CTRL + SHIFT + F organiza o código.
@@ -67,7 +68,17 @@ public class OrdenaStrings {
 //		});
         
 		//Princípio básico do lambda: consegue ser convertido para uma classe funcional.
-		palavras.sort((s1, s2) -> Integer.compare(s1.length(), s2.length()));
+		//palavras.sort((s1, s2) -> Integer.compare(s1.length(), s2.length()));
+		
+		//Recebe uma interface funcional. Uma interface com um único método abstrato. 
+		//Usa uma factory dentro da própria interface comparator, que recebe um lambda (dado uma string pega o tamanho dela).
+		//Factory de comparators. "Palavras ordene, comparando s.length".
+		palavras.sort(Comparator.comparing(s -> s.length()));
+		//Equivale à
+		//Function<String, Integer> funcao = s -> s.length();
+		//Comparator<String> comparador = Comparator.comparing(funcao);
+		//palavras.sort(comparador);
+		palavras.sort(Comparator.comparing(String::length));
 
 		System.out.println(palavras);
 
@@ -109,10 +120,13 @@ public class OrdenaStrings {
 //				System.out.println(s);
 //				
 //});
-		palavras.forEach(s -> System.out.println(s));
+		//palavras.forEach(s -> System.out.println(s));
+		palavras.forEach(System.out::println);
 		
 		//Transformando em lambda. (Equivalente ao comando de cima).
-		Consumer<String> impressor  = s -> System.out.println(s);
+		//Consumer<String> impressor  = s -> System.out.println(s);
+		//Converte System.out::println para um Consumer.
+		Consumer<String> impressor  =  System.out::println;
 		palavras.forEach(impressor);
 		
 		//Não funciona por não ser uma interface funcional à esquerda.
